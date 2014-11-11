@@ -1,0 +1,119 @@
+{% autoescape true %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Contact Manager</title>
+	<script src="/plugs/js/jquery.js"></script>
+	<script src="/plugs/js/underscore.js"></script>
+	<script src="/plugs/js/backbone.js"></script>
+	<link rel="stylesheet" type="text/css" href="/plugs/css/graphui.css">
+	<link rel="stylesheet" type="text/css" href="/plugs/css/contactmgr.css">
+</head>
+<body>
+	<script type="text/template" id="contactMgrSkeleton">
+		<div id='pageContainer'> 
+	          <div id='pageHeader' class='uiHeaderLight'>
+	            <div class='containerMain'>
+	              <div><strong><a class='uiTransition' href='/'>Contact Manager App</a></strong></div>
+	            </div>
+	          </div>     
+	          <div id='pageBody'>
+	            <div class='containerMain'>
+	            </div>
+	          </div>
+	          <div id='pageFooter'></div>
+	      </div>
+    </script>
+	<script type="text/template" id="contactSearch">
+		<div id="contactSearcher" >
+          <form id="contactSearchForm" method="post" action="">
+            <span><input placeholder="Search for name, email, or phone" type="text" name="q" class="span6"></span><button id="searchC" type="submit" style="margin-top:2px"><i class="uiIcon-hl-search"></i></button>
+          </form>
+        </div><span class="pull-right" style="margin-top:20px;"><a id="__linkLogin" href="#"></a></span>
+	</script>
+	<script type="text/template" id="contactForm">
+        <div id="contactAdder">
+          <form id="contactAddForm" method="post" action="">
+            <div class="uiPageHeader"><h3>Add Contact</h3></div>
+            <div><span><input placeholder="Last Name" type="text" name="lname" class="span3"></span><span><input placeholder="First Name" type="text" name="fname" class="span3"></span></div>
+            <div><span><input placeholder="example_email@domain.com" type="text" name="email" class="span6"></span></div>
+            <div><span><input placeholder="09123456789" type="text" name="phone" maxlength="11" class="span6"></span></div>
+            <div><button id="addC" type="button" class="pull-right uiButtonLarge uiButtonDisabled" disabled="disabled"><i class="uiIcon-hl-ok"></i> Add Contact</button></div>
+          </form>
+        </div>
+        <div id="contactList">
+          <div class="uiPageHeader"><h3>Contact List</h3></div>
+          <div id="clist">
+            <div class="clist-row">
+              <div class="clist-col-1">Name</div>
+              <div class="clist-col-2">Email</div>
+              <div class="clist-col-3">Phone</div>
+            </div>
+          </div>
+        </div>
+	</script>
+	<script type="text/template" id="contactLister">
+		<div class="clist-row">
+            <div class="clist-col-1">
+            	<div class="uiDropdown uiDropdown-button">
+            		<a class="uiDropdown-selected" href="#">
+            			<strong><%= lname %>,  <%= fname %></strong>
+            		</a>
+            		<ul class="uiDropdown-menu" role="menu">
+            			<li><a class="editU" data-title="Edit <%= fname %>" href="/edit/<%= id %>" data-href="/edit/<%= id %>"><i class="uiIcon-hl-pencil"></i> Edit <%= fname %></a></li>
+            			<li><a class="remU" href="/delete/<%= id %>"><i class="uiIcon-hl-remove"></i> Delete <%= fname %></a></li>
+            		</ul>
+            	</div>
+            </div>
+            <div class="clist-col-2"><%= email %></div> 
+            <div class="clist-col-3"><%= phone %></div> 
+        </div>
+	</script>
+  <script type="text/template" id="contactSearchList">
+    <div id="contactSList" class="pull-right" style="width:500px;margin-right:107px">
+      <div class="uiPageHeader"><h3>Search Results</h3></div>
+      <div id="clist" name="slist">
+        <div class="clist-row">
+          <div class="clist-col-1">Name</div>
+          <div class="clist-col-2">Email</div>
+          <div class="clist-col-3">Phone</div>
+      </div>
+    </div>
+  </script>
+	<script type="text/template" id="contactLists">
+		{% for list in current_contact_list%}
+		<div class="clist-row">
+            <div class="clist-col-1">
+            	<div class="uiDropdown uiDropdown-button">
+            		<a class="uiDropdown-selected" href="#">
+            			<strong>{{ list.conLastName }},  {{ list.conFirstName }}</strong>
+            		</a>
+            		<ul class="uiDropdown-menu" role="menu">
+            			<li><a class="editU" data-title="Edit {{list.conFirstName}}" data-href="/edit/{{ list.key.id() }}" href="/edit/{{ list.key.id() }}"><i class="uiIcon-hl-pencil"></i> Edit {{ list.conFirstName }}</a></li>
+            			<li><a class="remU" href="/delete/{{ list.key.id() }}"><i class="uiIcon-hl-remove"></i> Delete {{ list.conFirstName }}</a></li>
+            		</ul>
+            	</div>
+            </div>
+            <div class="clist-col-2">{{ list.conEmail }}</div> 
+            <div class="clist-col-3">{{ list.conPhone }}</div> 
+        </div>
+        {% endfor %}
+	</script>
+	<script src="/plugs/js/graphui-dropdown.js"></script>
+	<script src="/plugs/js/graphui-modal.js"></script>
+	<script src="/plugs/js/contactmgr.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    $("#__linkLogin")
+        .html("{{login_url_text}}")
+        .attr('href','{{login_url_link}}');
+    var user = "Welcome {{current_user}} | ";
+    if("{{current_user}}" !="None"){
+      $("#__linkLogin").parent().prepend(user);
+    }
+  });
+  </script>
+</body>
+</html>	
+{% endautoescape %}

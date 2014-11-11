@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Edit {{current_contact_list.conFirstName}}</title>
+	<script src="/plugs/js/jquery.js"></script>
+	<link rel="stylesheet" type="text/css" href="/plugs/css/graphui.css">
+	<link rel="stylesheet" type="text/css" href="/plugs/css/contactmgr.css">
+</head>
+<body>
+	<div style="width:400px;margin:0 auto;padding:20px;height:300px">
+			<div id="contactAdder">
+	          <form id="contactAddForm" method="post" action="/edit/{{current_contact_id}}">
+	            <div><span><input placeholder="Last Name" type="text" name="lname" value="{{current_contact_list.conLastName}}" class="span3"></span><span><input placeholder="First Name" type="text" name="fname" value="{{current_contact_list.conFirstName}}" class="span3"></span></div>
+	            <div><span><input placeholder="example_email@domain.com" type="text" name="email" value="{{current_contact_list.conEmail}}" class="span6"></span></div>
+	            <div><span><input placeholder="09123456789" maxlength="11" type="text" name="phone" value="{{current_contact_list.conPhone}}" class="span6"></span></div>
+	            <div><button id="updateC" type="submit" class="pull-right uiButtonLarge uiButtonDisabled" disabled="disabled"><i class="uiIcon-hl-ok"></i> Update Contact</button></div>
+	          </form>
+	        </div>
+	</div>
+	<script type="text/javascript">
+		$("input[type='text'").on('keyup input propertychange change', function(){
+			if($('[name="fname"]').val().length>0 
+	            && $('[name="fname"]').val().length>0 
+	            && $('[name="email"]').val().length>0
+	            && Validate.isEmail($('[name="email"]').val())
+	            && $('[name="phone"]').val().length==11 
+	            && Validate.isPhone($('[name="phone"]').val())){
+	          $('#updateC').removeAttr('disabled')
+	            .removeClass('uiButtonDisabled');
+	            return;
+        	}
+        	$('#addC').attr('disabled','disabled')
+          		.addClass('uiButtonDisabled');
+        });
+        var Validate = {
+			isEmail: function(email){
+				var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+				return re.test(email);
+			},
+			isPhone: function(phone){
+				return parseInt(phone) && phone.substring(0,1) == "0" && phone.substring(1,2) == "9";
+			},
+        };
+	</script>
+</body>
+</html>
